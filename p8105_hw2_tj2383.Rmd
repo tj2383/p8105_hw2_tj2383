@@ -5,13 +5,17 @@ date: "9/25/2018"
 output: github_document
 ---
 
+## Homework Two
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-Downloaded dataset from github for problem 3
+# Problem 1
+
+Read in dataset
 ```{r}
-devtools::install_github("p8105/p8105.datasets")
+transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
 ```
 
