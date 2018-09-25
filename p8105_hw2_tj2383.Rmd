@@ -9,3 +9,9 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
+
+Downloaded dataset from github for problem 3
+```{r}
+devtools::install_github("p8105/p8105.datasets")
+```
+
