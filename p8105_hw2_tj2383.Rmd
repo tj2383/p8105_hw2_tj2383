@@ -5,18 +5,24 @@ date: "9/25/2018"
 output: github_document
 ---
 
-## Homework Two
+# Homework Two
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-# Problem 1
+## Problem 1
 
 Read in and clean the transit dataset:
 ```{r}
 transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% 
   janitor::clean_names() %>%
-  select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, north_south_street, east_west_street, ada)
+  select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, north_south_street, east_west_street, ada) %>% mutate(entry_logical = recode(entry, "YES" = TRUE, "NO" = FALSE))
 ```
+
+
+
+
+
+
