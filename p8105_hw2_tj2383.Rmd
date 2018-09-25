@@ -13,13 +13,25 @@ library(tidyverse)
 ## Problem 1
 
 Read in and clean the transit dataset:
-```{r}
+```{r cleaning}
 transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv", col_types = "cccddcccccccccccccccccccccccddcc") %>% 
   janitor::clean_names() %>%
   select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada) %>% mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
 ```
 
-This dataset was first imported using the read_csv statement. I then cleaned the variable names so that they were converted to lower case and the snake format, this makes the variables easy to use while coding. I further cleaned the dataset by selecting key variables to include in the dataset; line, station name, station latitude, station longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entry, vending, entrance_type, and ada. Lastly, I changed the "entry" variable from a character variable to a logical variable. The dimensions of this dataset are `r dim(transit_data)`. This dataset is still not tidy. For example, there are several "route" variables that could be consolidated.
+According to the cleaning code chunk, this dataset was first imported using the read_csv statement. I then cleaned the variable names so that they were converted to lower case and the snake format, this makes the variables easy to use while coding. I further cleaned the dataset by selecting key variables to include in the dataset; line, station name, station latitude, station longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entry, vending, entrance_type, and ada. Lastly, I changed the "entry" variable from a character variable to a logical variable. The dimensions of this dataset are `r dim(transit_data)`. This dataset is still not tidy. For example, there are several "route" variables that could be consolidated.
+
+
+The following were conducted in this code chunk:
+-How many distinct stations are there?
+-How many stations are ADA compliant?
+-What proportion of station entrances / exits without vending allow entrance?
+-Reformat data so that route number and route name are distinct variables. How many distinct stations serve the A train? How many are ADA compliant?
+```{r problem1_q}
+distinct(transit_data, line, station_name)
+```
+
+According to the problem1_q code chunk, there are `r count(distinct(transit_data, line, station_name))` distinct stations.
 
 
 
