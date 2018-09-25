@@ -5,8 +5,6 @@ date: "9/25/2018"
 output: github_document
 ---
 
-# Homework Two
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -18,10 +16,10 @@ Read in and clean the transit dataset:
 ```{r}
 transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv", col_types = "cccddcccccccccccccccccccccccddcc") %>% 
   janitor::clean_names() %>%
-  select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, north_south_street, east_west_street, ada) %>% mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
+  select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada) %>% mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
 ```
 
-This dataset was first imported using the read_csv statement. I then cleaned the variable names so that they were converted to lower case snake, this makes the variables easy to use while coding. I further cleaned the dataset by selecting key variables to include in the dataset; line, station name, station latitude, station longitude, routes, entry, vending, north-south entrance, east-west entrance, and ADA compliance. Lastly, I changed the "entry" variable from a character variable to a logical variable and called that new variable "entry_logical". The dimensions of this dataset are `r dim(transit_data)`. This dataset is not tidy. For example, there are several "route" variables that could be consolidated.
+This dataset was first imported using the read_csv statement. I then cleaned the variable names so that they were converted to lower case and the snake format, this makes the variables easy to use while coding. I further cleaned the dataset by selecting key variables to include in the dataset; line, station name, station latitude, station longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entry, vending, entrance_type, and ada. Lastly, I changed the "entry" variable from a character variable to a logical variable. The dimensions of this dataset are `r dim(transit_data)`. This dataset is still not tidy. For example, there are several "route" variables that could be consolidated.
 
 
 
