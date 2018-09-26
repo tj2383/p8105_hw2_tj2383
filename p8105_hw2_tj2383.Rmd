@@ -84,6 +84,9 @@ precipitation17_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2
   janitor::clean_names() %>% 
   filter(!is.na(precipitation_in) & !is.na(x_1) & precipitation_in != ("Month")) %>% 
   add_column(year = "2017")
+
+precipitation_16_17_data = bind_rows(precipitation16_data, precipitation17_data) %>% 
+  mutate(precipitation_in = month.name[as.integer(precipitation_in)])
 ```
 
 
