@@ -34,12 +34,16 @@ transit_data %>%
 select(transit_data, line, station_name, ada) %>% 
   filter(ada == "TRUE") %>% 
   distinct(line, station_name, ada)
+select(transit_data, entry, vending) %>% 
+  filter(vending == "NO") %>% 
+  summarize(mean(entry))
 ```
 
 According to the problem1_q code chunk, there are `r count(distinct(transit_data, line, station_name))` distinct stations. There are `r count(select(transit_data, line, station_name, ada) %>% 
   filter(ada == "TRUE") %>% 
-  distinct(line, station_name, ada))` ADA compliant stations. 
-
+  distinct(line, station_name, ada))` ADA compliant stations. The proportion of station entrace/exits with no vending are `r select(transit_data, entry, vending) %>% 
+  filter(vending == "NO") %>% 
+  summarize(mean(entry))`.
 
 
 
