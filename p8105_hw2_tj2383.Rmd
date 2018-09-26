@@ -45,6 +45,23 @@ According to the problem1_q code chunk, there are `r count(distinct(transit_data
   filter(vending == "NO") %>% 
   summarize(mean(entry))`.
 
+```{r reformat_transit}
+reformat_transit_data = 
+  transit_data %>% 
+  gather(key = route_number, value = route_name, route1:route11)
+
+select(reformat_transit_data, route_name, station_name, line) %>% 
+  filter(route_name == "A") %>% 
+  distinct(line, station_name)
+
+select(reformat_transit_data, route_name, station_name, line, ada) %>% 
+  filter(route_name == "A", ada == "TRUE") %>% 
+  distinct(line, station_name)
+```
+
+There are 60 distinct stations that serve the A train. 17 of these stations are ADA compliant.
+
+
 
 
 
