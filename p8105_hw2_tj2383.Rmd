@@ -70,7 +70,9 @@ Read in and clean the Mr.Trash Wheel dataset
 trashwheel_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", "Mr. Trash Wheel", range = cellranger::cell_cols("A:N")) %>% 
   janitor::clean_names() %>% 
   filter(!is.na(dumpster)) %>% 
-  mutate(sports_balls = as.integer(round(sports_balls))) %>% 
+  mutate(sports_balls = as.integer(round(sports_balls)))
+
+trashwheel_data %>% 
   filter(year == "2016") %>% 
   summarize(median(sports_balls))
 ```
@@ -91,14 +93,18 @@ precipitation17_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2
   add_column(year = "2017") %>% 
   rename(month = precipitation_in) %>% 
   rename(rainfall_in = x_1) %>% 
-  mutate(rainfall_in = as.numeric(rainfall_in)) %>% 
-  summarize(sum(rainfall_in))
+  mutate(rainfall_in = as.numeric(rainfall_in))
+
+precipitation17_data %>% 
+  select(rainfall_in) %>% 
+  sum()
 
 precipitation_16_17_data = bind_rows(precipitation16_data, precipitation17_data) %>% 
   mutate(month = month.name[as.integer(month)]) 
 ```
+  
 
-The two original datasets, 2016 Precipitation and 2017 Precipitation were cleaned and combined to make 2016/2017 Precipitation data (precipitation_16_17_data). There are `r nrow(precipitation16_data) ` observations in the 2016 dataset and `r nrow(precipitation17_data) ` observations in the 2017 dataset. The key variables in this dataset include `month` which indicates the month and `rainfall_in` which indicates the rainfall amount in inches. The total precipitation in 2017 was 29.9 inches. The median number of sports balls in 2016 according to the trashwheel_data was 26.
+The two original datasets, 2016 Precipitation and 2017 Precipitation were cleaned and combined to make 2016/2017 Precipitation data (precipitation_16_17_data). There are `r nrow(precipitation16_data) ` observations in the 2016 dataset and `r nrow(precipitation17_data) ` observations in the 2017 dataset. The key variables in this dataset include `month` which indicates the month and `rainfall_in` which indicates the rainfall amount in inches. The total precipitation for 2017 was `r precipitation17_data %>% select(rainfall_in) %>% sum()`. The median sports balls in 2016 was `r trashwheel_data %>% filter(year == "2016") %>% summarize(median(sports_balls))`.
 
 ## Problem 3
 
