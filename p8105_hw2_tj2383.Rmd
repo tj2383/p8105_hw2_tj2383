@@ -124,12 +124,24 @@ brfss_data = brfss_smart2010 %>%
   filter(topic == "Overall Health") %>% 
   select(-class, -topic, -question, -sample_size, -confidence_limit_low:-geo_location) %>% 
   spread(key = response, value = data_value) %>% 
-  janitor::clean_names() %>% 
+  janitor::clean_names()
+
+brfss_data %>% 
   mutate(proportion_excellent_verygood = (excellent + very_good) / 100) %>% 
   filter(year == "2002", !is.na(excellent))
+
+brfss_data %>% 
+  distinct(locationabbr)
+
+brfss_data %>% 
+  count(locationabbr) %>% 
+  arrange(desc(n)) %>% 
+  select(locationabbr) %>% 
+  head(1)
 ```
 
-According to the brfss_dataset there are `r count(distinct(brfss_data, locationdesc))` unique locations. Yes, all states are represented, determined by counting the number of unique states which was `r count(distinct(brfss_data, locationabbr))` including Washington D.C. The state observed the most was . In 2002, the median of the "Excellent" response value was `r brfss_data %>% filter(year == "2002", !is.na(excellent)) %>% 
+According to the brfss_dataset there are `r count(distinct(brfss_data, locationdesc))` unique locations. Yes, all states are represented, determined by counting the number of values for `locationabbr` which is 51 including Washington D.C. The state observed the most was `r brfss_data %>% count(locationabbr) %>% arrange(desc(n)) %>% 
+select(locationabbr) %>% head(1)`. In 2002, the median of the "Excellent" response value was `r brfss_data %>% filter(year == "2002", !is.na(excellent)) %>% 
   summarize(median(excellent))`.
 
 
