@@ -19,15 +19,10 @@ transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data
   select(line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada) %>%
   mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
 ```
+According to the "cleaning" code chunk, this dataset was first imported using the read_csv statement. I then cleaned the variable names so that they were converted to lower case and the snake format. I further cleaned the dataset by selecting key variables to include in the dataset; `line`, `station_name`, `station_latitude`, `station_longitude`, `route1`, `route2`, `route3`, `route4`, `route5`, `route6`, `route7`, `route8`, `route9`, `route10`, `route11`, `entry`, `vending`, `entrance_type`, and `ada`. Lastly, I changed the `entry` variable from a character variable to a logical variable. The dimensions (rows, columns) of this dataset are `r dim(transit_data)`. While I did some cleaning, this dataset is still not entirely tidy. For example, there are several "route" variables that span multiple columns and instead could be consolidated to show one column called `route` and the value for each route in another column.
 
-According to the cleaning code chunk, this dataset was first imported using the read_csv statement. I then cleaned the variable names so that they were converted to lower case and the snake format, this makes the variables easy to use while coding. I further cleaned the dataset by selecting key variables to include in the dataset; line, station name, station latitude, station longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entry, vending, entrance_type, and ada. Lastly, I changed the "entry" variable from a character variable to a logical variable. The dimensions of this dataset are `r dim(transit_data)`. This dataset is still not tidy. For example, there are several "route" variables that could be consolidated.
 
-
-The following were conducted in this code chunk:
--How many distinct stations are there?
--How many stations are ADA compliant?
--What proportion of station entrances / exits without vending allow entrance?
--Reformat data so that route number and route name are distinct variables. How many distinct stations serve the A train? How many are ADA compliant?
+The following "problem1_q" code chunk answers questions about transit_data:
 ```{r problem1_q}
 transit_data %>% 
   distinct(line, station_name) 
@@ -38,15 +33,14 @@ select(transit_data, entry, vending) %>%
   filter(vending == "NO") %>% 
   summarize(mean(entry))
 ```
-
 According to the problem1_q code chunk, there are `r count(distinct(transit_data, line, station_name))` distinct stations. There are `r count(select(transit_data, line, station_name, ada) %>% 
   filter(ada == "TRUE") %>% 
-  distinct(line, station_name, ada))` ADA compliant stations. The proportion of station entrace/exits with no vending are `r select(transit_data, entry, vending) %>% 
+  distinct(line, station_name, ada))` ADA compliant stations. The proportion of station entrace/exits with no vending is `r select(transit_data, entry, vending) %>% 
   filter(vending == "NO") %>% 
   summarize(mean(entry))`.
 
 
-In this code chunk reformatted data so that route number and route name are distinct variables. Then I calculated the number of distinct stations serve the A train and how many of them are ADA compliant.
+The following "reformat_transit" code chunk reformatted data so that route number and route name are distinct variables. Then I calculated the number of distinct stations serving the A train and how many of them are ADA compliant.
 ```{r reformat_transit}
 reformat_transit_data = 
   transit_data %>% 
@@ -60,7 +54,6 @@ select(reformat_transit_data, route_name, station_name, line, ada) %>%
   filter(route_name == "A", ada == "TRUE") %>% 
   distinct(line, station_name)
 ```
-
 There are 60 distinct stations that serve the A train. 17 of these stations are ADA compliant.
 
 ## Problem 2
@@ -76,8 +69,10 @@ trashwheel_data %>%
   filter(year == "2016") %>% 
   summarize(median(sports_balls))
 ```
+According to this code chunk, I specified the sheet in the Excel file and omited columns containing notes, cleaned the variables to be lowercase snake, omitted rows with no dumpster-specific data, and rounded the number of `sports_balls` to the nearest integer and converted it to an integer variable.
 
-In this code chunk I read in and cleaned 2016 and 2017 Precipitation datasets. For each, I omitted rows without precipitation data and added a variable, `year`. I renamed the variables "precipitation_in" and "x_in". Next, I combined the datasets and converted month to a character variable.
+
+In the following code chunk I read in and cleaned 2016 and 2017 Precipitation datasets. For each, I omitted rows without precipitation data and added a variable, `year`. I renamed the variable "precipitation_in" to `month` and the variable "x_in" to `rainfall_in`. Next, I combined the datasets to create precipitation_16_17_data and converted `month` to a character variable.
 ```{r}
 precipitation16_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", "2016 Precipitation", range = cellranger::cell_cols("A:B")) %>% 
   janitor::clean_names() %>% 
@@ -102,18 +97,16 @@ precipitation17_data %>%
 precipitation_16_17_data = bind_rows(precipitation16_data, precipitation17_data) %>% 
   mutate(month = month.name[as.integer(month)]) 
 ```
-  
-
-The two original datasets, 2016 Precipitation and 2017 Precipitation were cleaned and combined to make 2016/2017 Precipitation data (precipitation_16_17_data). There are `r nrow(precipitation16_data) ` observations in the 2016 dataset and `r nrow(precipitation17_data) ` observations in the 2017 dataset. The key variables in this dataset include `month` which indicates the month and `rainfall_in` which indicates the rainfall amount in inches. The total precipitation for 2017 was `r precipitation17_data %>% select(rainfall_in) %>% sum()`. The median sports balls in 2016 was `r trashwheel_data %>% filter(year == "2016") %>% summarize(median(sports_balls))`.
+The two original datasets, 2016 Precipitation and 2017 Precipitation were cleaned and combined to make 2016/2017 Precipitation data (precipitation_16_17_data). There are `r nrow(precipitation16_data) ` observations in the 2016 dataset and `r nrow(precipitation17_data) ` observations in the 2017 dataset. The key variables in this dataset include `month` which indicates the month and `rainfall_in` which indicates the rainfall amount in inches. The total precipitation for 2017 was `r precipitation17_data %>% select(rainfall_in) %>% sum()`. The median sports balls in 2016 from the trashwheel_data was `r trashwheel_data %>% filter(year == "2016") %>% summarize(median(sports_balls))`.
 
 ## Problem 3
 
-In this code chunk I read in the data then:
+In the following code chunk I read in the data:
 -formatted the data to use appropriate variable names;
 focused on the “Overall Health” topic
--excluded variables for class, topic, question, sample size, and everything from lower confidence limit to GeoLocation
--structured data so that values for Response (“Excellent” to “Poor”) are column names / variables which indicate the proportion of subjects with each response (which are values of Data_value in the original dataset)
--created a new variable showing the proportion of responses that were “Excellent” or “Very Good”
+-excluded variables for `class`, `topic`, `question`, `sample_size`, and everything from `confidence_limit_low` to `geo_location`
+-structured data so that values for Response (“Excellent” to “Poor”) are column names/variables which indicate the proportion of subjects with each response (which are values of Data_value in the original dataset)
+-created a new variable showing the proportion of responses that were “Excellent” or “Very Good” called `proportion_excellent_verygood`
 ```{r}
 devtools::install_github("p8105/p8105.datasets")
 library(p8105.datasets)
@@ -139,18 +132,23 @@ brfss_data %>%
   arrange(desc(n)) %>% 
   select(locationabbr) %>% 
   head(1)
+```
+According to the brfss_dataset there are `r count(distinct(brfss_data, locationdesc))` unique locations. Yes, all states are represented, determined by counting the number of values for `locationabbr` which is `r brfss_data %>% distinct(locationabbr) %>% count()` including Washington D.C. The state observed the most was `r brfss_data %>% count(locationabbr) %>% arrange(desc(n)) %>% 
+select(locationabbr) %>% head(1)`. In 2002, the median of the "Excellent" response value was `r brfss_data %>% filter(year == "2002", !is.na(excellent)) %>% 
+  summarize(median(excellent))`.
 
+The following is a histogram of the `excellent` response values in 2002.
+```{r}
 brfss_data %>% 
   filter(year == "2002", !is.na(excellent)) %>% 
   ggplot(aes(x = excellent)) + geom_histogram()
+```
 
+The following is a scatterplot of the proportion of `Excellent` response values in New York County and Queens County (both in NY State) in each year from 2002 to 2010:
+```{r}
 brfss_data %>% 
   filter(locationdesc == "NY - Queens County" | locationdesc == "NY - New York County") %>% 
   ggplot(aes(x = year, y = excellent, color = locationdesc)) + geom_point()
 ```
-
-According to the brfss_dataset there are `r count(distinct(brfss_data, locationdesc))` unique locations. Yes, all states are represented, determined by counting the number of values for `locationabbr` which is `r brfss_data %>% distinct(locationabbr) %>% count()` including Washington D.C. The state observed the most was `r brfss_data %>% count(locationabbr) %>% arrange(desc(n)) %>% 
-select(locationabbr) %>% head(1)`. In 2002, the median of the "Excellent" response value was `r brfss_data %>% filter(year == "2002", !is.na(excellent)) %>% 
-  summarize(median(excellent))`.
 
 
