@@ -97,16 +97,16 @@ precipitation17_data %>%
 precipitation_16_17_data = bind_rows(precipitation16_data, precipitation17_data) %>% 
   mutate(month = month.name[as.integer(month)]) 
 ```
-The two original datasets, 2016 Precipitation and 2017 Precipitation were cleaned and combined to make 2016/2017 Precipitation data (precipitation_16_17_data). There are `r nrow(precipitation16_data) ` observations in the 2016 dataset and `r nrow(precipitation17_data) ` observations in the 2017 dataset. The key variables in this dataset include `month` which indicates the month and `rainfall_in` which indicates the rainfall amount in inches. The total precipitation for 2017 was `r precipitation17_data %>% select(rainfall_in) %>% sum()`. The median sports balls in 2016 from the trashwheel_data was `r trashwheel_data %>% filter(year == "2016") %>% summarize(median(sports_balls))`.
+The two original datasets, 2016 Precipitation and 2017 Precipitation were cleaned and combined to make 2016/2017 Precipitation data (precipitation_16_17_data). There are `r nrow(precipitation16_data) ` observations in the 2016 dataset and `r nrow(precipitation17_data) ` observations in the 2017 dataset. The key variables in this dataset include `month` which indicates the month and `rainfall_in` which indicates the rainfall amount in inches. The total precipitation for 2017 was `r precipitation17_data %>% select(rainfall_in) %>% sum()` inches. The median number of sports balls in 2016 from the trashwheel_data was `r trashwheel_data %>% filter(year == "2016") %>% summarize(median(sports_balls))`.
 
 ## Problem 3
 
 In the following code chunk I read in the data:
--formatted the data to use appropriate variable names;
+1. formatted the data to use appropriate variable names;
 focused on the “Overall Health” topic
--excluded variables for `class`, `topic`, `question`, `sample_size`, and everything from `confidence_limit_low` to `geo_location`
--structured data so that values for Response (“Excellent” to “Poor”) are column names/variables which indicate the proportion of subjects with each response (which are values of Data_value in the original dataset)
--created a new variable showing the proportion of responses that were “Excellent” or “Very Good” called `proportion_excellent_verygood`
+2. excluded variables for `class`, `topic`, `question`, `sample_size`, and everything from `confidence_limit_low` to `geo_location`
+3. structured data so that values for Response (“Excellent” to “Poor”) are column names/variables which indicate the proportion of subjects with each response (which are values of Data_value in the original dataset)
+4. created a new variable showing the proportion of responses that were “Excellent” or “Very Good” called `proportion_excellent_verygood`
 ```{r}
 devtools::install_github("p8105/p8105.datasets")
 library(p8105.datasets)
