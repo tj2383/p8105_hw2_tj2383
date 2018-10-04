@@ -60,7 +60,7 @@ There are 60 distinct stations that serve the A train. 17 of these stations are 
 
 Read in and clean the Mr.Trash Wheel dataset
 ```{r}
-trashwheel_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", "Mr. Trash Wheel", range = cellranger::cell_cols("A:N")) %>% 
+trashwheel_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", "Mr. Trash Wheel", range = cellranger::cell_cols("A:N")) %>% 
   janitor::clean_names() %>% 
   filter(!is.na(dumpster)) %>% 
   mutate(sports_balls = as.integer(round(sports_balls)))
@@ -74,7 +74,7 @@ According to this code chunk, I specified the sheet in the Excel file and omited
 
 In the following code chunk I read in and cleaned 2016 and 2017 Precipitation datasets. For each, I omitted rows without precipitation data and added a variable, `year`. I renamed the variable "precipitation_in" to `month` and the variable "x_in" to `rainfall_in`. Next, I combined the datasets to create precipitation_16_17_data and converted `month` to a character variable.
 ```{r}
-precipitation16_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", "2016 Precipitation", range = cellranger::cell_cols("A:B")) %>% 
+precipitation16_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", "2016 Precipitation", range = cellranger::cell_cols("A:B")) %>% 
   janitor::clean_names() %>% 
   filter(!is.na(precipitation_in) & precipitation_in != ("Month")) %>% 
   add_column(year = "2016") %>% 
@@ -82,7 +82,7 @@ precipitation16_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2
   rename(rainfall_in = x_1) %>% 
   mutate(rainfall_in = as.numeric(rainfall_in))
 
-precipitation17_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", "2017 Precipitation", range = cellranger::cell_cols("A:B")) %>% 
+precipitation17_data = readxl::read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", "2017 Precipitation", range = cellranger::cell_cols("A:B")) %>% 
   janitor::clean_names() %>% 
   filter(!is.na(precipitation_in) & !is.na(x_1) & precipitation_in != ("Month")) %>% 
   add_column(year = "2017") %>% 
